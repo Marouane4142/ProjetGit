@@ -1,4 +1,10 @@
-import { createTask, removeTask, taskSummary, toggleTask } from './tasks.js';
+import {
+  createTask,
+  filterTasks,
+  removeTask,
+  taskSummary,
+  toggleTask,
+} from './tasks.js';
 import { loadTasks, saveTasks } from './storage.js';
 import { initializeTheme } from './theme.js';
 
@@ -9,6 +15,7 @@ const emptyState = document.querySelector('#empty-state');
 const counter = document.querySelector('#task-counter');
 const template = document.querySelector('#task-template');
 const themeToggle = document.querySelector('#theme-toggle');
+const searchInput = document.querySelector('#task-search');
 
 let tasks = loadTasks();
 
@@ -22,7 +29,9 @@ function persistAndRender() {
 function render() {
   list.replaceChildren();
 
-  for (const task of tasks) {
+  const visibleTasks = filterTasks(tasks, searchInput.value);
+
+  for (const task of visibleTasks) {
     const item = template.content.firstElementChild.cloneNode(true);
     item.dataset.id = task.id;
     item.classList.toggle('is-done', task.done);
@@ -32,7 +41,10 @@ function render() {
 
   const { total, remaining } = taskSummary(tasks);
   counter.textContent = `${remaining} restante${remaining > 1 ? 's' : ''}`;
-  emptyState.hidden = total > 0;
+  emptyState.textContent = total === 0
+    ? 'Aucune tâche pour le moment.'
+    : 'Aucune tâche ne correspond à la recherche.';
+  emptyState.hidden = visibleTasks.length > 0;
 }
 
 form.addEventListener('submit', (event) => {
@@ -57,5 +69,7 @@ list.addEventListener('click', (event) => {
 
   persistAndRender();
 });
+
+searchInput.addEventListener('input', render);
 
 render();

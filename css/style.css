@@ -132,6 +132,23 @@ button {
   font-weight: 750;
 }
 
+.search-box {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.search-box input {
+  padding: 0.65rem 0.8rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.7rem;
+}
+
 .task-list {
   display: grid;
   gap: 0.65rem;
@@ -226,7 +243,8 @@ button {
   background: #1e293b;
 }
 
-[data-theme='dark'] .task-form input {
+[data-theme='dark'] .task-form input,
+[data-theme='dark'] .search-box input {
   border-color: #475569;
   background: #1e293b;
 }
