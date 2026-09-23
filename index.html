@@ -35,6 +35,12 @@
             autocomplete="off"
             required
           />
+          <label class="sr-only" for="task-priority">Priorité</label>
+          <select id="task-priority" name="priority">
+            <option value="normal">Normale</option>
+            <option value="high">Haute</option>
+            <option value="low">Basse</option>
+          </select>
           <button type="submit">Ajouter</button>
         </form>
 
@@ -46,6 +52,7 @@
     <template id="task-template">
       <li class="task-item">
         <button class="toggle-task" type="button" aria-label="Changer l'état"></button>
+        <span class="priority-dot" aria-hidden="true"></span>
         <span class="task-label"></span>
         <button class="delete-task" type="button" aria-label="Supprimer la tâche">×</button>
       </li>

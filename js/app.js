@@ -1,9 +1,16 @@
-import { createTask, removeTask, taskSummary, toggleTask } from './tasks.js';
+import {
+  createTask,
+  removeTask,
+  sortTasksByPriority,
+  taskSummary,
+  toggleTask,
+} from './tasks.js';
 import { loadTasks, saveTasks } from './storage.js';
 import { initializeTheme } from './theme.js';
 
 const form = document.querySelector('#task-form');
 const input = document.querySelector('#task-title');
+const priorityInput = document.querySelector('#task-priority');
 const list = document.querySelector('#task-list');
 const emptyState = document.querySelector('#empty-state');
 const counter = document.querySelector('#task-counter');
@@ -22,9 +29,12 @@ function persistAndRender() {
 function render() {
   list.replaceChildren();
 
-  for (const task of tasks) {
+  const orderedTasks = sortTasksByPriority(tasks);
+
+  for (const task of orderedTasks) {
     const item = template.content.firstElementChild.cloneNode(true);
     item.dataset.id = task.id;
+    item.dataset.priority = task.priority ?? 'normal';
     item.classList.toggle('is-done', task.done);
     item.querySelector('.task-label').textContent = task.title;
     list.append(item);
@@ -37,7 +47,10 @@ function render() {
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
-  tasks = [...tasks, createTask(input.value)];
+  tasks = [
+    ...tasks,
+    createTask(input.value, crypto.randomUUID(), priorityInput.value),
+  ];
   input.value = '';
   input.focus();
   persistAndRender();
