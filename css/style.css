@@ -93,6 +93,22 @@ button {
   justify-content: space-between;
 }
 
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.secondary-button {
+  padding: 0.4rem 0.65rem;
+  border: 1px solid #c7d2fe;
+  border-radius: 0.55rem;
+  color: #4338ca;
+  background: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 .panel-heading h2 {
   margin: 0;
 }
@@ -220,7 +236,8 @@ button {
 }
 
 [data-theme='dark'] .task-item,
-[data-theme='dark'] .theme-toggle {
+[data-theme='dark'] .theme-toggle,
+[data-theme='dark'] .secondary-button {
   border-color: #334155;
   color: #c7d2fe;
   background: #1e293b;

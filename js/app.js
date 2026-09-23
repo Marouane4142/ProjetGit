@@ -1,6 +1,7 @@
 import { createTask, removeTask, taskSummary, toggleTask } from './tasks.js';
 import { loadTasks, saveTasks } from './storage.js';
 import { initializeTheme } from './theme.js';
+import { downloadTasks } from './export.js';
 
 const form = document.querySelector('#task-form');
 const input = document.querySelector('#task-title');
@@ -9,6 +10,7 @@ const emptyState = document.querySelector('#empty-state');
 const counter = document.querySelector('#task-counter');
 const template = document.querySelector('#task-template');
 const themeToggle = document.querySelector('#theme-toggle');
+const exportButton = document.querySelector('#export-tasks');
 
 let tasks = loadTasks();
 
@@ -57,5 +59,7 @@ list.addEventListener('click', (event) => {
 
   persistAndRender();
 });
+
+exportButton.addEventListener('click', () => downloadTasks(tasks));
 
 render();
