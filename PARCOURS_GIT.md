@@ -453,6 +453,21 @@ git push origin master
 git push origin v1.1.0
 ```
 
+Le merge crée un nouveau commit uniquement sur `master`. Resynchronisez immédiatement
+`pre-prod`, puis rebasez chaque fonctionnalité encore ouverte :
+
+```bash
+git switch pre-prod
+git rebase master
+
+git switch feature/recherche
+git rebase pre-prod
+# Répéter le rebase pour les autres branches feature/* encore ouvertes.
+```
+
+Juste après cette opération, `master` et `pre-prod` pointent sur le même commit de
+livraison. Les fonctionnalités en cours ont toutes ce commit comme ancêtre.
+
 Ces commandes changent `master` et GitHub. Pour une démonstration sans effet réel,
 remplacez `master` par une branche `atelier/release` et `origin` par `formation`.
 
