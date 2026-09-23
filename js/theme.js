@@ -4,12 +4,18 @@ export function nextTheme(currentTheme) {
   return currentTheme === 'dark' ? 'light' : 'dark';
 }
 
+export function resolveInitialTheme(storedTheme, prefersDark) {
+  if (storedTheme === 'light' || storedTheme === 'dark') return storedTheme;
+  return prefersDark ? 'dark' : 'light';
+}
+
 export function initializeTheme(
   button,
   root = document.documentElement,
   storage = localStorage,
+  prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches,
 ) {
-  let theme = storage.getItem(THEME_KEY) ?? 'light';
+  let theme = resolveInitialTheme(storage.getItem(THEME_KEY), prefersDark);
 
   function applyTheme() {
     root.dataset.theme = theme;
