@@ -1,13 +1,20 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { createTask, removeTask, taskSummary, toggleTask } from '../js/tasks.js';
+import {
+  createTask,
+  removeTask,
+  sortTasksByPriority,
+  taskSummary,
+  toggleTask,
+} from '../js/tasks.js';
 
 test('createTask nettoie le titre', () => {
   assert.deepEqual(createTask('  Lire la documentation  ', 'task-1'), {
     id: 'task-1',
     title: 'Lire la documentation',
     done: false,
+    priority: 'normal',
   });
 });
 
@@ -48,4 +55,15 @@ test('taskSummary calcule les tâches restantes', () => {
     completed: 1,
     remaining: 2,
   });
+});
+
+test('sortTasksByPriority place les tâches urgentes en premier', () => {
+  const tasks = [
+    { id: '1', priority: 'low' },
+    { id: '2', priority: 'high' },
+    { id: '3', priority: 'normal' },
+  ];
+
+  assert.deepEqual(sortTasksByPriority(tasks).map((task) => task.id), ['2', '3', '1']);
+  assert.deepEqual(tasks.map((task) => task.id), ['1', '2', '3']);
 });
