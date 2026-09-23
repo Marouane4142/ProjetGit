@@ -11,12 +11,13 @@ simple : l'objectif principal est d'explorer son historique et de manipuler Git.
 
 | Branche | Rôle | État attendu |
 | --- | --- | --- |
-| `master` | version stable, assimilée à la production | application de base |
+| `master` | version stable, assimilée à la production | uniquement des merges de `pre-prod` |
 | `pre-prod` | intégration et validation avant production | contient le thème sombre |
-| `feature/recherche` | recherche dans les tâches | prête à fusionner |
-| `feature/priorites` | niveaux de priorité | prête à fusionner, conflit pédagogique possible |
-| `feature/export-csv` | export des tâches en CSV | un commit idéal pour `cherry-pick` |
-| `feature/refactor-stockage` | évolution du stockage local | plusieurs commits à rebaser |
+| `feature/recherche` | recherche dans les tâches | publiée, basée sur `pre-prod` |
+| `feature/priorites` | niveaux de priorité | publiée, basée sur `pre-prod` |
+| `feature/export-csv` | export des tâches en CSV | publiée, basée sur `pre-prod` |
+| `feature/refactor-stockage` | évolution du stockage local | publiée, basée sur `pre-prod` |
+| `feature/theme-sombre` | préférence de thème système | publiée, basée sur `pre-prod` |
 
 Afficher la carte réelle :
 
@@ -26,10 +27,18 @@ git log --graph --decorate --oneline --all
 
 Conventions utilisées :
 
-- `master` reçoit seulement des versions validées ;
+- aucun commit direct n'est créé sur `master` : elle reçoit uniquement des merges
+  `--no-ff` provenant de `pre-prod` ;
 - `pre-prod` rassemble les fonctionnalités avant leur mise en production ;
-- une branche `feature/*` isole une fonctionnalité ;
+- toute branche `feature/*` est créée depuis `pre-prod`, jamais depuis `master` ;
 - une branche `atelier/*` est jetable et sert uniquement aux exercices.
+
+Vérifier qu'une branche actuelle descend bien de `pre-prod` :
+
+```bash
+git merge-base --is-ancestor pre-prod feature/recherche
+echo $? # 0 signifie « oui » dans Bash
+```
 
 ## 2. Diagnostic de départ
 
@@ -176,10 +185,12 @@ version de la branche fusionnée
 >>>>>>> feature/priorites
 ```
 
-Gardez une combinaison fonctionnelle des deux versions, puis :
+Gardez une combinaison fonctionnelle des deux versions. Dans ce dépôt, les conflits
+attendus concernent `css/style.css`, `js/app.js`, `js/tasks.js` et
+`test/tasks.test.js` ; `index.html` est fusionné automatiquement. Puis :
 
 ```bash
-git add index.html js/app.js css/style.css
+git add css/style.css js/app.js js/tasks.js test/tasks.test.js
 git commit
 npm test
 ```
@@ -192,17 +203,20 @@ git merge --abort
 
 ## 7. Rebaser une branche
 
-Travaillez sur une copie pour conserver la branche d'origine :
+Simulez d'abord une avancée de `pre-prod`, puis travaillez sur des copies pour
+conserver les branches préparées :
 
 ```bash
+git switch -c atelier/pre-prod-avance pre-prod
+git commit --allow-empty -m "chore: simuler une avancée de pre-prod"
 git switch -c atelier/rebase feature/refactor-stockage
-git rebase pre-prod
+git rebase atelier/pre-prod-avance
 git log --graph --decorate --oneline -12
 npm test
 ```
 
-Le rebase rejoue les commits de la branche au-dessus de `pre-prod`. En cas de
-conflit :
+Le rebase rejoue les commits de la fonctionnalité au-dessus de la nouvelle base de
+pré-production. En cas de conflit :
 
 ```bash
 # Corriger les fichiers, puis :
@@ -304,7 +318,7 @@ Ce dépôt possède normalement deux remotes :
 git remote -v
 ```
 
-- `origin` : le dépôt GitHub réel ;
+- `origin` : le dépôt GitHub réel avec `master`, `pre-prod` et les `feature/*` ;
 - `formation` : un dépôt Git bare local, sans risque pour GitHub.
 
 ### `fetch`, branches distantes et `push`
@@ -320,14 +334,16 @@ git status --short --branch
 
 Après `-u`, `git push` et `git pull` savent quelle branche distante utiliser.
 
-Pour publier réellement une branche de fonctionnalité sur GitHub :
+Les fonctionnalités sont publiées sur GitHub, mais doivent toujours avoir été
+créées depuis `pre-prod` :
 
 ```bash
-git push -u origin feature/recherche
+git switch pre-prod
+git switch -c feature/nouvelle-fonction
+git push -u origin feature/nouvelle-fonction
 ```
 
-Cette dernière commande modifie GitHub : ne l'exécutez que si le dépôt et vos droits
-d'accès ont été vérifiés.
+Une branche `feature/*` ne doit jamais être créée directement depuis `master`.
 
 ### Simuler `pull` avec un collègue
 
@@ -424,7 +440,9 @@ vérifie pas ce garde-fou.
 
 ## 12. Mettre `pre-prod` en production
 
-À montrer après validation des fonctionnalités :
+Après validation des fonctionnalités, la mise en production passe obligatoirement
+par un commit de merge de `pre-prod`. Aucun fichier ne doit être modifié ou validé
+directement sur `master` :
 
 ```bash
 git switch master
@@ -446,7 +464,8 @@ Placez-vous d'abord sur une branche à conserver :
 git switch master
 git branch --list "atelier/*"
 git branch -D atelier/premier-commit atelier/stash atelier/merge
-git branch -D atelier/rebase atelier/cherry-pick atelier/reset atelier/revert
+git branch -D atelier/pre-prod-avance atelier/rebase atelier/cherry-pick
+git branch -D atelier/reset atelier/revert
 git branch -D atelier/push atelier/pull atelier/force-with-lease
 git fetch formation --prune
 ```
