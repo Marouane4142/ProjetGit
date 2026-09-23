@@ -28,3 +28,12 @@ export function taskSummary(tasks) {
   return { total, completed, remaining: total - completed };
 }
 
+export function filterTasks(tasks, query) {
+  const normalizedQuery = query.trim().toLocaleLowerCase('fr');
+
+  if (!normalizedQuery) return tasks;
+
+  return tasks.filter((task) =>
+    task.title.toLocaleLowerCase('fr').includes(normalizedQuery),
+  );
+}
