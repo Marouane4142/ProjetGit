@@ -42,6 +42,23 @@ button {
   letter-spacing: -0.06em;
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.theme-toggle {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #c7d2fe;
+  border-radius: 999px;
+  color: #4338ca;
+  background: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
 .hero p {
   margin: 0;
   color: #64748b;
@@ -186,3 +203,34 @@ button {
   border: 0;
 }
 
+[data-theme='dark'] {
+  color-scheme: dark;
+  color: #e2e8f0;
+  background: #0f172a;
+}
+
+[data-theme='dark'] body {
+  background: radial-gradient(circle at top, #1e293b 0, #0f172a 60%, #020617 100%);
+}
+
+[data-theme='dark'] .task-panel {
+  border-color: rgba(129, 140, 248, 0.25);
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.28);
+}
+
+[data-theme='dark'] .task-item,
+[data-theme='dark'] .theme-toggle {
+  border-color: #334155;
+  color: #c7d2fe;
+  background: #1e293b;
+}
+
+[data-theme='dark'] .task-form input {
+  border-color: #475569;
+  background: #1e293b;
+}
+
+[data-theme='dark'] .empty-state {
+  border-color: #475569;
+}
