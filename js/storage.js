@@ -2,13 +2,15 @@ const STORAGE_KEY = 'taskboard.tasks';
 
 export function loadTasks(storage = localStorage) {
   try {
-    return JSON.parse(storage.getItem(STORAGE_KEY)) ?? [];
+    const payload = JSON.parse(storage.getItem(STORAGE_KEY));
+
+    if (Array.isArray(payload)) return payload;
+    return payload?.tasks ?? [];
   } catch {
     return [];
   }
 }
 
 export function saveTasks(tasks, storage = localStorage) {
-  storage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  storage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, tasks }));
 }
-

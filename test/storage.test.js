@@ -21,6 +21,14 @@ test('saveTasks et loadTasks conservent les tâches', () => {
   saveTasks(tasks, storage);
 
   assert.deepEqual(loadTasks(storage), tasks);
+  assert.deepEqual(JSON.parse(storage.read()), { version: 1, tasks });
+});
+
+test('loadTasks migre l’ancien format sous forme de tableau', () => {
+  const legacyTasks = [{ id: 'legacy', title: 'Ancienne tâche', done: true }];
+  const storage = createMemoryStorage(JSON.stringify(legacyTasks));
+
+  assert.deepEqual(loadTasks(storage), legacyTasks);
 });
 
 test('loadTasks renvoie une liste vide si les données sont invalides', () => {
