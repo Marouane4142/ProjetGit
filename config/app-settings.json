@@ -1,5 +1,5 @@
 {
   "applicationName": "TaskBoard",
-  "welcomeMessage": "Bienvenue dans votre espace de travail",
+  "welcomeMessage": "Suivez l'avancement de votre équipe",
   "itemsPerPage": 10
 }
