@@ -18,5 +18,9 @@ npx serve .
 npm test
 ```
 
-Le parcours de formation complet se trouve dans `PARCOURS_GIT.md`.
+## Supports de formation
+
+- `PARCOURS_GIT.md` explique les notions et le parcours complet ;
+- `COMMANDES_DEMO_GIT.md` contient les commandes PowerShell prêtes à exécuter
+  pendant une démonstration.
 
