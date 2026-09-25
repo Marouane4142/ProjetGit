@@ -110,12 +110,17 @@ button {
   margin: 1.25rem 0;
 }
 
-.task-form input {
+.task-form input,
+.task-form select {
   min-width: 0;
   flex: 1;
   padding: 0.8rem 0.95rem;
   border: 1px solid #cbd5e1;
   border-radius: 0.7rem;
+}
+
+.task-form select {
+  flex: 0 0 auto;
 }
 
 .task-form input:focus {
@@ -155,6 +160,21 @@ button {
 .task-label {
   flex: 1;
   overflow-wrap: anywhere;
+}
+
+.priority-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+
+[data-priority='high'] .priority-dot {
+  background: #ef4444;
+}
+
+[data-priority='low'] .priority-dot {
+  background: #38bdf8;
 }
 
 .toggle-task {
@@ -226,7 +246,8 @@ button {
   background: #1e293b;
 }
 
-[data-theme='dark'] .task-form input {
+[data-theme='dark'] .task-form input,
+[data-theme='dark'] .task-form select {
   border-color: #475569;
   background: #1e293b;
 }

@@ -1,4 +1,6 @@
-export function createTask(title, id = crypto.randomUUID()) {
+const PRIORITY_ORDER = { high: 0, normal: 1, low: 2 };
+
+export function createTask(title, id = crypto.randomUUID(), priority = 'normal') {
   const cleanTitle = title.trim();
 
   if (!cleanTitle) {
@@ -9,6 +11,7 @@ export function createTask(title, id = crypto.randomUUID()) {
     id,
     title: cleanTitle,
     done: false,
+    priority,
   };
 }
 
@@ -26,5 +29,13 @@ export function taskSummary(tasks) {
   const total = tasks.length;
   const completed = tasks.filter((task) => task.done).length;
   return { total, completed, remaining: total - completed };
+}
+
+export function sortTasksByPriority(tasks) {
+  return [...tasks].sort(
+    (first, second) =>
+      (PRIORITY_ORDER[first.priority] ?? PRIORITY_ORDER.normal)
+      - (PRIORITY_ORDER[second.priority] ?? PRIORITY_ORDER.normal),
+  );
 }
 
