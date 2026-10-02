@@ -19,6 +19,7 @@ test('toggleTask inverse uniquement la tâche ciblée', () => {
   const tasks = [
     { id: '1', title: 'Une', done: false },
     { id: '2', title: 'Deux', done: false },
+    { id: '3', title: 'trois', done: false },
   ];
 
   assert.deepEqual(toggleTask(tasks, '2'), [
