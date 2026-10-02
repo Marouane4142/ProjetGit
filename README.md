@@ -18,7 +18,7 @@ npx serve .
 npm test
 ```
 
-## Supports pédagogiques
+## Supports pour GitHub
 
 - `PARCOURS_GIT.md` explique les notions et le parcours complet ;
 - `COMMANDES_DEMO_GIT.md` contient les commandes PowerShell prêtes à exécuter
