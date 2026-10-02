@@ -24,3 +24,7 @@ npm test
 - `COMMANDES_DEMO_GIT.md` contient les commandes PowerShell prêtes à exécuter
   pendant une démonstration.
 
+
+## Sc?nario de d?monstration
+
+Cette section sert de base ? une PR sans conflit.
